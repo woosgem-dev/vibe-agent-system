@@ -1,0 +1,5 @@
+{
+  "name": "vibe-agent-system",
+  "description": "Agent definition framework with OOP-style inheritance for prompt architecture",
+  "version": "1.0.0"
+}

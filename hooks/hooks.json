@@ -1,0 +1,16 @@
+{
+  "description": "VAS agent activation hook. Detects VAS_AGENT_PATH and triggers agent definition loading on session start.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Check if the environment variable VAS_AGENT_PATH is set. If it is, read the agent definition file. Parse its YAML frontmatter to extract type, name, extends, and skills. Follow the extends chain recursively (extends can be a string or a list). Merge rules using VAS priority: Override > Instance > All Parents (Accumulated) > Interface. Within sections (Must/Never/Should/Override), rules are merged via Key-based Replacement: rules with the same [Key] or **Key** from different parents are accumulated, but a rule in the Instance replaces all inherited rules with that same Key. Register all skills as available methods. Apply the merged Persona and rules as session-level constraints. Invoke the vas-activate skill for full protocol resolution."
+          }
+        ]
+      }
+    ]
+  }
+}

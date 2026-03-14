@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Vibe-Agent-System (VAS) Precision Linker
-# Automates symbolic linking for Gemini, Claude, and Codex environments.
+# Vibe-Agent-System (VAS) Interactive Precision Linker
+# Supports: Gemini, Claude Desktop, Codex
 
 set -e
 
@@ -10,35 +10,70 @@ MANIFEST="$PROJECT_ROOT/plugin.json"
 HOOKS="$PROJECT_ROOT/hooks"
 SKILLS="$PROJECT_ROOT/skills"
 
-echo "🚀 VAS Precision Linker starting..."
+echo "🚀 VAS Interactive Precision Linker starting..."
+echo "Please select the environments you want to install VAS into (e.g., 1,2):"
+echo "1) Gemini (~/.gemini)"
+echo "2) Claude Desktop (~/.claude)"
+echo "3) Codex (~/.codex)"
+echo "4) All of the above"
+echo "q) Quit"
 
-# --- 1. Gemini / Codex Setup ---
-GEMINI_DIR="$HOME/.gemini/extensions/vibe-agent-system"
-echo -n "Checking for Gemini/Codex... "
-if [ -d "$HOME/.gemini" ]; then
-    echo "Found."
-    mkdir -p "$GEMINI_DIR"
-    ln -sf "$MANIFEST" "$GEMINI_DIR/gemini-extension.json"
-    ln -sf "$HOOKS" "$GEMINI_DIR/hooks"
-    ln -sf "$SKILLS" "$GEMINI_DIR/skills"
-    echo "✅ Gemini extension linked to $GEMINI_DIR"
-else
-    echo "Skipped (not found)."
+read -p "Selection: " choice
+
+install_gemini() {
+    local TARGET_DIR="$HOME/.gemini/extensions/vibe-agent-system"
+    echo "📦 Installing to Gemini..."
+    mkdir -p "$TARGET_DIR"
+    ln -sf "$MANIFEST" "$TARGET_DIR/gemini-extension.json"
+    ln -sf "$HOOKS" "$TARGET_DIR/hooks"
+    ln -sf "$SKILLS" "$TARGET_DIR/skills"
+    echo "✅ Gemini extension linked to $TARGET_DIR"
+}
+
+install_claude() {
+    local TARGET_DIR="$HOME/.claude/plugins/vibe-agent-system"
+    local MANIFEST_DIR="$TARGET_DIR/.claude-plugin"
+    echo "📦 Installing to Claude Desktop..."
+    mkdir -p "$MANIFEST_DIR"
+    ln -sf "$MANIFEST" "$MANIFEST_DIR/plugin.json"
+    ln -sf "$HOOKS" "$TARGET_DIR/hooks"
+    ln -sf "$SKILLS" "$TARGET_DIR/skills"
+    echo "✅ Claude plugin linked to $TARGET_DIR"
+}
+
+install_codex() {
+    local TARGET_DIR="$HOME/.codex/extensions/vibe-agent-system"
+    echo "📦 Installing to Codex..."
+    mkdir -p "$TARGET_DIR"
+    ln -sf "$MANIFEST" "$TARGET_DIR/gemini-extension.json"
+    ln -sf "$HOOKS" "$TARGET_DIR/hooks"
+    ln -sf "$SKILLS" "$TARGET_DIR/skills"
+    echo "✅ Codex extension linked to $TARGET_DIR"
+}
+
+case $choice in
+    *1*) install_gemini ;;
+esac
+
+case $choice in
+    *2*) install_claude ;;
+esac
+
+case $choice in
+    *3*) install_codex ;;
+esac
+
+if [[ "$choice" == "4" ]]; then
+    install_gemini
+    install_claude
+    install_codex
 fi
 
-# --- 2. Claude Desktop Setup ---
-CLAUDE_DIR="$HOME/.claude/plugins/vibe-agent-system"
-CLAUDE_MANIFEST_DIR="$CLAUDE_DIR/.claude-plugin"
-echo -n "Checking for Claude Desktop... "
-if [ -d "$HOME/.claude" ]; then
-    echo "Found."
-    mkdir -p "$CLAUDE_MANIFEST_DIR"
-    ln -sf "$MANIFEST" "$CLAUDE_MANIFEST_DIR/plugin.json"
-    ln -sf "$HOOKS" "$CLAUDE_DIR/hooks"
-    ln -sf "$SKILLS" "$CLAUDE_DIR/skills"
-    echo "✅ Claude plugin linked to $CLAUDE_DIR"
-else
-    echo "Skipped (not found)."
+if [[ "$choice" == "q" ]]; then
+    echo "Installation cancelled."
+    exit 0
 fi
 
-echo "🎉 VAS Installation complete! Don't forget to set VAS_AGENT_PATH."
+echo ""
+echo "🎉 VAS Installation process finished!"
+echo "Don't forget to set VAS_AGENT_PATH in your environment or extension settings."

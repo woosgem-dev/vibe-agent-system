@@ -42,13 +42,22 @@ cd vibe-agent-system
 
 To ensure different agents (Claude, Gemini, Codex) recognize this plugin correctly, create the following symbolic links in their respective extension directories:
 
-**For Gemini / Codex (Folder Linking)**
+**For Gemini / Codex (Precision Linking)**
+Gemini expects the `gemini-extension.json` at the root of the extension directory:
 ```bash
-ln -s $(pwd) ~/.gemini/extensions/vibe-agent-system
+# Create the target extension directory
+mkdir -p ~/.gemini/extensions/vibe-agent-system
+
+# Link the manifest
+ln -s $(pwd)/gemini-extension.json ~/.gemini/extensions/vibe-agent-system/gemini-extension.json
+
+# Link hooks and skills directories
+ln -s $(pwd)/hooks ~/.gemini/extensions/vibe-agent-system/hooks
+ln -s $(pwd)/skills ~/.gemini/extensions/vibe-agent-system/skills
 ```
 
 **For Claude Desktop (Precision Linking)**
-Claude Desktop expects a specific structure. Follow these commands to link the manifest and core directories:
+Claude Desktop expects a specific structure (`.claude-plugin` subfolder):
 ```bash
 # Create the target plugin directory
 mkdir -p ~/.claude/plugins/vibe-agent-system/.claude-plugin

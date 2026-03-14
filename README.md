@@ -39,13 +39,26 @@ cd vibe-agent-system
 ```
 
 #### 2. Cross-Agent Compatibility (Symlink - Recommended)
-The most reliable way to share this plugin across different environments (Claude, Gemini, Codex) is to create a symbolic link in their respective extension directories:
-```bash
-# For Gemini
-ln -s $(pwd) ~/.gemini/extensions/vibe-agent-system
 
-# For Claude
-ln -s $(pwd) ~/.claude/plugins/vibe-agent-system
+To ensure different agents (Claude, Gemini, Codex) recognize this plugin correctly, create the following symbolic links in their respective extension directories:
+
+**For Gemini / Codex (Folder Linking)**
+```bash
+ln -s $(pwd) ~/.gemini/extensions/vibe-agent-system
+```
+
+**For Claude Desktop (Precision Linking)**
+Claude Desktop expects a specific structure. Follow these commands to link the manifest and core directories:
+```bash
+# Create the target plugin directory
+mkdir -p ~/.claude/plugins/vibe-agent-system/.claude-plugin
+
+# Link the manifest
+ln -s $(pwd)/plugin.json ~/.claude/plugins/vibe-agent-system/.claude-plugin/plugin.json
+
+# Link hooks and skills directories
+ln -s $(pwd)/hooks ~/.claude/plugins/vibe-agent-system/hooks
+ln -s $(pwd)/skills ~/.claude/plugins/vibe-agent-system/skills
 ```
 
 #### Alternative: Register via CLI

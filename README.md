@@ -38,19 +38,20 @@ git clone git@github.com:woosgem-dev/vibe-agent-system.git
 cd vibe-agent-system
 ```
 
-#### 2. Register with Gemini CLI
-```bash
-gemini extensions add $(pwd)
-```
-
-#### 3. Cross-Agent Compatibility (Symlink)
-To share this plugin across different environments (Claude, Gemini, Codex), use a symbolic link:
+#### 2. Cross-Agent Compatibility (Symlink - Recommended)
+The most reliable way to share this plugin across different environments (Claude, Gemini, Codex) is to create a symbolic link in their respective extension directories:
 ```bash
 # For Gemini
 ln -s $(pwd) ~/.gemini/extensions/vibe-agent-system
 
 # For Claude
 ln -s $(pwd) ~/.claude/plugins/vibe-agent-system
+```
+
+#### Alternative: Register via CLI
+If you prefer not to use symlinks, you can register the local path directly:
+```bash
+gemini extensions add $(pwd)
 ```
 
 ## Getting Started

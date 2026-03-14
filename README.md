@@ -27,19 +27,20 @@
 ## Getting Started
 
 ### 1. Define an Agent
-Create a Markdown file with YAML frontmatter. Refer to `skills/vas-activate/examples/` for templates.
+Create a Markdown file with YAML frontmatter. Refer to `skills/vas-activate/examples/` for templates. Use **$VAS_PLUGIN_PATH** to inherit from core interfaces regardless of installation location.
 
 ```markdown
 ---
 type: instance
-name: my_dev_agent
+name: my_local_agent
 extends:
-  - ./path/to/typescript_developer.md
-  - ./path/to/senior_trait.md
+  - $VAS_PLUGIN_PATH/skills/vas-activate/examples/abstract_agent.md
+  - ./path/to/my_custom_class.md
 ---
 
 ## Persona
 - [Identity] You are a Senior TS Engineer focused on high-performance architecture.
+```
 
 ## Must
 - [Priority] All implementation must use Strict Mode TypeScript.

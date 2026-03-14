@@ -65,6 +65,22 @@ Once the inheritance chain is resolved and rules are merged:
 - Treat Override rules as the highest-priority directives
 - Treat listed Skills as callable methods — read their content when needed
 
+## Path Resolution & Portability
+
+When installed as a plugin (e.g., in `~/.claude/plugins/`), absolute paths change. VAS handles this using **Context-Aware Path Resolution**:
+
+1.  **Relative Paths**: Paths starting with `./` in `extends` are resolved relative to the file they are in.
+2.  **Plugin Variables**: The system provides `VAS_PLUGIN_PATH` (the root of the installed plugin) to easily reference core interfaces from your local project agents.
+
+**Example: Local Agent inheriting from Core Interface**
+```markdown
+---
+type: instance
+name: my_local_agent
+extends: $VAS_PLUGIN_PATH/skills/vas-activate/examples/abstract_agent.md
+---
+```
+
 ## Agent Development & Testing
 
 When developing a new agent, follow the **"Define -> Resolve -> Test"** lifecycle:

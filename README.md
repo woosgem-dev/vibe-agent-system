@@ -38,34 +38,28 @@ git clone git@github.com:woosgem-dev/vibe-agent-system.git
 cd vibe-agent-system
 ```
 
-#### 2. Cross-Agent Compatibility (Symlink - Recommended)
-
-To ensure different agents (Claude, Gemini, Codex) recognize this plugin correctly, create the following symbolic links in their respective extension directories:
-
-**For Gemini / Codex (Precision Linking)**
-Gemini expects the `gemini-extension.json` at the root. Link it to our single `plugin.json` manifest:
+#### 2. Automatic Precision Linking (Recommended)
+Run the provided installation script to automatically detect and link the plugin to your Gemini and Claude extension directories:
 ```bash
-# Create the target extension directory
+chmod +x install.sh
+./install.sh
+```
+
+#### 3. Manual Precision Linking (Alternative)
+If you prefer to link the files manually, use the following commands:
+
+**For Gemini / Codex**
+```bash
 mkdir -p ~/.gemini/extensions/vibe-agent-system
-
-# Link the manifest (using plugin.json as the source)
 ln -s $(pwd)/plugin.json ~/.gemini/extensions/vibe-agent-system/gemini-extension.json
-
-# Link hooks and skills directories
 ln -s $(pwd)/hooks ~/.gemini/extensions/vibe-agent-system/hooks
 ln -s $(pwd)/skills ~/.gemini/extensions/vibe-agent-system/skills
 ```
 
-**For Claude Desktop (Precision Linking)**
-Claude Desktop expects a specific structure (`.claude-plugin` subfolder):
+**For Claude Desktop**
 ```bash
-# Create the target plugin directory
 mkdir -p ~/.claude/plugins/vibe-agent-system/.claude-plugin
-
-# Link the manifest
 ln -s $(pwd)/plugin.json ~/.claude/plugins/vibe-agent-system/.claude-plugin/plugin.json
-
-# Link hooks and skills directories
 ln -s $(pwd)/hooks ~/.claude/plugins/vibe-agent-system/hooks
 ln -s $(pwd)/skills ~/.claude/plugins/vibe-agent-system/skills
 ```

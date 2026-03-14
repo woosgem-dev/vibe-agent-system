@@ -9,6 +9,8 @@ PROJECT_ROOT=$(pwd)
 MANIFEST="$PROJECT_ROOT/plugin.json"
 HOOKS="$PROJECT_ROOT/hooks"
 SKILLS="$PROJECT_ROOT/skills"
+AGENTS="$PROJECT_ROOT/agents"
+VAS_CONFIG="$HOME/.agents/vas-config.json"
 
 echo "🚀 VAS Interactive Precision Linker starting..."
 echo "Please select the environments you want to install VAS into (e.g., 1,2):"
@@ -27,6 +29,7 @@ install_gemini() {
     ln -sf "$MANIFEST" "$TARGET_DIR/gemini-extension.json"
     ln -sf "$HOOKS" "$TARGET_DIR/hooks"
     ln -sf "$SKILLS" "$TARGET_DIR/skills"
+    ln -sf "$AGENTS" "$TARGET_DIR/agents"
     echo "✅ Gemini extension linked to $TARGET_DIR"
 }
 
@@ -38,6 +41,7 @@ install_claude() {
     ln -sf "$MANIFEST" "$MANIFEST_DIR/plugin.json"
     ln -sf "$HOOKS" "$TARGET_DIR/hooks"
     ln -sf "$SKILLS" "$TARGET_DIR/skills"
+    ln -sf "$AGENTS" "$TARGET_DIR/agents"
     echo "✅ Claude plugin linked to $TARGET_DIR"
 }
 
@@ -48,7 +52,19 @@ install_codex() {
     ln -sf "$MANIFEST" "$TARGET_DIR/gemini-extension.json"
     ln -sf "$HOOKS" "$TARGET_DIR/hooks"
     ln -sf "$SKILLS" "$TARGET_DIR/skills"
+    ln -sf "$AGENTS" "$TARGET_DIR/agents"
     echo "✅ Codex extension linked to $TARGET_DIR"
+}
+
+setup_config() {
+    if [ ! -f "$VAS_CONFIG" ]; then
+        echo "📝 Creating default config at $VAS_CONFIG..."
+        mkdir -p "$HOME/.agents"
+        echo '{"agent_path": "~/.agents/agent.md"}' > "$VAS_CONFIG"
+        echo "✅ Config created. Edit $VAS_CONFIG to set your agent definition path."
+    else
+        echo "ℹ️  Config already exists at $VAS_CONFIG — skipping."
+    fi
 }
 
 case $choice in
@@ -74,6 +90,8 @@ if [[ "$choice" == "q" ]]; then
     exit 0
 fi
 
+setup_config
+
 echo ""
-echo "🎉 VAS Installation process finished!"
-echo "Don't forget to set VAS_AGENT_PATH in your environment or extension settings."
+echo "🎉 VAS Installation complete!"
+echo "Config: $VAS_CONFIG"

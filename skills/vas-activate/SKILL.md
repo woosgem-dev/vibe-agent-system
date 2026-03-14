@@ -1,7 +1,7 @@
 ---
 name: vas-activate
-description: This skill should be used when the session starts and VAS_AGENT_PATH is set, when the user mentions "activate agent", "load agent", "VAS", "agent definition", or when agent definition files with extends/skills/override frontmatter are detected. Teaches the LLM how to read VAS agent definition files and resolve the inheritance chain.
-version: 1.0.0
+description: This skill should be used when the session starts, when the user mentions "activate agent", "load agent", "VAS", "agent definition", or when agent definition files with extends/skills/override frontmatter are detected. Teaches the LLM how to read VAS agent definition files and resolve the inheritance chain.
+version: 1.1.0
 ---
 
 # VAS Agent Activation
@@ -10,7 +10,7 @@ Activate and interpret VAS (Vibe-Agent-System) agent definition files. VAS intro
 
 ## Activation Flow
 
-1. Read the agent definition file from `VAS_AGENT_PATH` environment variable
+1. Read `~/.agents/vas-config.json` to get the `agent_path`
 2. Parse the YAML frontmatter to extract `type`, `name`, `extends`, and `skills`
 3. Follow the `extends` chain — if `extends` is a list, resolve each parent recursively.
 4. Merge all rules using the priority order: **Override > Instance > All Parents (Accumulated) > Interface**
@@ -65,6 +65,26 @@ Once the inheritance chain is resolved and rules are merged:
 - Treat Override rules as the highest-priority directives
 - Treat listed Skills as callable methods — read their content when needed
 
+## Saving Agents
+
+When the user creates or modifies an agent definition, ask where to save it:
+
+### Global (`~/.agents/agents/{agent_name}.md`)
+
+Shared across all projects. After saving, create symlinks in each installed platform:
+
+```
+~/.claude/agents/{agent_name}.md  → ~/.agents/agents/{agent_name}.md
+~/.gemini/agents/{agent_name}.md  → ~/.agents/agents/{agent_name}.md
+~/.codex/agents/{agent_name}.md   → ~/.agents/agents/{agent_name}.md
+```
+
+Then update `~/.agents/vas-config.json` with the new `agent_path`.
+
+### Project (`./.agents/agents/{agent_name}.md`)
+
+Scoped to the current project only. Update `~/.agents/vas-config.json` with the project-local path.
+
 ## Path Resolution & Portability
 
 When installed as a plugin (e.g., in `~/.claude/plugins/`), absolute paths change. VAS handles this using **Context-Aware Path Resolution**:
@@ -77,7 +97,7 @@ When installed as a plugin (e.g., in `~/.claude/plugins/`), absolute paths chang
 ---
 type: instance
 name: my_local_agent
-extends: $VAS_PLUGIN_PATH/skills/vas-activate/examples/abstract_agent.md
+extends: $VAS_PLUGIN_PATH/agents/agent.md
 ---
 ```
 

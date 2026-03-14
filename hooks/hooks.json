@@ -1,5 +1,5 @@
 {
-  "description": "VAS agent activation hook. Detects VAS_AGENT_PATH and triggers agent definition loading on session start.",
+  "description": "VAS agent activation hook. Reads ~/.agents/vas-config.json and triggers agent definition loading on session start.",
   "hooks": {
     "SessionStart": [
       {
@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "This VAS extension is installed at '${extensionPath}'. Set this as VAS_PLUGIN_PATH. Check for the VAS_AGENT_PATH environment variable (which can be configured via extension settings). If it exists, read and parse the agent definition file. Resolve any environment variables like $VAS_PLUGIN_PATH or $HOME within the YAML frontmatter. Follow the recursive extends chain, merging all rules using VAS priority: Override > Instance > All Parents (Accumulated) > Interface. Within sections (Must/Never/Should/Override), rules are merged via Key-based Replacement: rules with the same [Key] or **Key** from different parents are accumulated, but a rule in the Instance replaces all inherited rules with that same Key. Register all listed skills. Apply the resulting Persona and rules as the session's governing constraints. Invoke the vas-activate skill for full protocol resolution."
+            "prompt": "This VAS extension is installed at '${extensionPath}'. Set this as VAS_PLUGIN_PATH.\n\nResolve the agent definition path:\n1. Read ~/.agents/vas-config.json — extract the agent_path field.\n2. If the file does not exist, create it with the default config: {\"agent_path\": \"${extensionPath}/agents/agent.md\"}\n\nOnce the agent path is resolved, read and parse the agent definition file. Resolve any environment variables like $VAS_PLUGIN_PATH or $HOME within the YAML frontmatter. Follow the recursive extends chain, merging all rules using VAS priority: Override > Instance > All Parents (Accumulated) > Interface. Within sections (Must/Never/Should/Override), rules are merged via Key-based Replacement: rules with the same [Key] or **Key** from different parents are accumulated, but a rule in the Instance replaces all inherited rules with that same Key. Register all listed skills. Apply the resulting Persona and rules as the session's governing constraints. Invoke the vas-activate skill for full protocol resolution."
           }
         ]
       }

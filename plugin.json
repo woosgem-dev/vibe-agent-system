@@ -1,12 +1,5 @@
 {
   "name": "vibe-agent-system",
   "description": "Agent definition framework with OOP-style inheritance for prompt architecture",
-  "version": "1.0.0",
-  "settings": [
-    {
-      "name": "Agent Definition Path",
-      "envVar": "VAS_AGENT_PATH",
-      "description": "The absolute path to the VAS agent definition file (.md) you want to activate for the session."
-    }
-  ]
+  "version": "1.0.0"
 }

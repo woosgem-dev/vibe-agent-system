@@ -24,6 +24,35 @@
 └── README.md
 ```
 
+## Installation
+
+### Via Marketplace (Recommended)
+Search for **Vibe-Agent-System** in your agent's extension marketplace and click install.
+
+### Manual Installation (Local/Dev)
+To use VAS without a marketplace or to develop your own traits, link the repository to your agent's extension directory.
+
+#### 1. Clone the repository
+```bash
+git clone git@github.com:woosgem-dev/vibe-agent-system.git
+cd vibe-agent-system
+```
+
+#### 2. Register with Gemini CLI
+```bash
+gemini extensions add $(pwd)
+```
+
+#### 3. Cross-Agent Compatibility (Symlink)
+To share this plugin across different environments (Claude, Gemini, Codex), use a symbolic link:
+```bash
+# For Gemini
+ln -s $(pwd) ~/.gemini/extensions/vibe-agent-system
+
+# For Claude
+ln -s $(pwd) ~/.claude/plugins/vibe-agent-system
+```
+
 ## Getting Started
 
 ### 1. Define an Agent
